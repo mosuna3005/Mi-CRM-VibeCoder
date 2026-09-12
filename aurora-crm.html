@@ -1,0 +1,901 @@
+<title>Aurora CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-void:#0A0E17;
+  --bg-panel:#10162A;
+  --bg-panel-raised:#141B32;
+  --glass-fill:rgba(157,170,209,0.055);
+  --glass-fill-strong:rgba(157,170,209,0.09);
+  --glass-border:rgba(168,180,219,0.14);
+  --glass-border-strong:rgba(168,180,219,0.24);
+  --text-primary:#EDEFF8;
+  --text-secondary:#9AA3C0;
+  --text-muted:#6B7394;
+  --violet:#8B6BFF;
+  --cyan:#2DD4EE;
+  --emerald:#34E5A8;
+  --btn-grad-a:#6D4EFF;
+  --btn-grad-b:#0B7A94;
+  --success:#3ED598;
+  --warning:#F5B94A;
+  --critical:#FF6B7E;
+  --info:#4FB6FF;
+  --chan-ig:#F2679B;
+  --chan-tiktok:#5EEAD4;
+  --chan-wa:#3ED598;
+  --chan-fb:#5B9CFF;
+  --chan-web:#B9A6FF;
+  --font-display:'Sora','Segoe UI',system-ui,sans-serif;
+  --font-body:'Manrope','Segoe UI',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono','Consolas',monospace;
+  --shadow-md:0 12px 32px -14px rgba(0,0,0,0.55);
+  --shadow-lg:0 28px 70px -24px rgba(0,0,0,0.65);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg-void);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  padding:0 clamp(16px,4vw,16px);
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;text-wrap:balance;letter-spacing:-0.01em;color:var(--text-primary);}
+p{margin:0;}
+ul{margin:0;padding:0;list-style:none;}
+button{font-family:inherit;}
+input{font-family:inherit;}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px;}
+::selection{background:var(--violet);color:#fff;}
+.tabular{font-variant-numeric:tabular-nums;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+  html{scroll-behavior:auto;}
+}
+
+.container{max-width:1180px;margin:0 auto;}
+.section{padding-block:clamp(3.5rem,7vw,6.5rem);}
+.section-head{max-width:640px;margin-bottom:clamp(2rem,4vw,3rem);}
+.section-head.center{margin-inline:auto;text-align:center;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--font-mono);font-size:.75rem;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  background:linear-gradient(90deg,var(--violet),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:1rem;
+}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);display:inline-block;flex:none;}
+h2.h-section{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:700;}
+.lede{font-size:1.05rem;color:var(--text-secondary);margin-top:.9rem;max-width:56ch;}
+.section-head.center .lede{margin-inline:auto;}
+.grad-text{
+  background:linear-gradient(100deg,var(--violet) 10%,var(--cyan) 55%,var(--emerald) 95%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+.glass{
+  background:linear-gradient(180deg,var(--glass-fill-strong),var(--glass-fill));
+  border:1px solid var(--glass-border);
+  border-radius:20px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.8rem 1.4rem;border-radius:11px;font-weight:600;font-size:.9375rem;
+  border:1px solid transparent;cursor:pointer;transition:transform .15s ease,box-shadow .2s ease,border-color .15s ease,background .15s ease;
+  white-space:nowrap;
+}
+.btn-lg{padding:.95rem 1.7rem;font-size:1rem;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:linear-gradient(120deg,var(--btn-grad-a),var(--btn-grad-b));color:#fff;box-shadow:0 8px 24px -8px rgba(109,78,255,0.55);}
+.btn-primary:hover{box-shadow:0 10px 30px -6px rgba(109,78,255,0.7);}
+.btn-ghost{background:transparent;color:var(--text-primary);border-color:var(--glass-border-strong);}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+.btn-block{width:100%;}
+
+/* aurora background */
+.aurora-bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg-void);}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.32;}
+.blob-a{width:46vw;height:46vw;top:-14vw;left:-8vw;background:var(--violet);animation:drift1 26s ease-in-out infinite;}
+.blob-b{width:38vw;height:38vw;top:6vw;right:-10vw;background:var(--cyan);animation:drift2 32s ease-in-out infinite;}
+.blob-c{width:34vw;height:34vw;bottom:-14vw;left:22vw;background:var(--emerald);opacity:.22;animation:drift3 30s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(4vw,3vw) scale(1.08);}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-3vw,4vw) scale(1.1);}}
+@keyframes drift3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(3vw,-2vw) scale(1.05);}}
+
+/* reveal on scroll, safe fallback (visible unless JS adds reveal-init) */
+.reveal{transition:opacity .7s cubic-bezier(.22,.68,.32,1),transform .7s cubic-bezier(.22,.68,.32,1);}
+.reveal-init{opacity:0;transform:translateY(26px);}
+.reveal-init.reveal-in{opacity:1;transform:none;}
+
+/* ---------- NAV ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(10,14,23,0.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--glass-border);}
+.nav-inner{max-width:1180px;margin:0 auto;height:70px;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.logo{display:flex;align-items:center;gap:.6rem;font-family:var(--font-display);font-weight:700;font-size:1.15rem;flex:none;}
+.logo svg{flex:none;}
+.logo span{color:var(--text-secondary);font-weight:600;}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{font-size:.9rem;font-weight:600;color:var(--text-secondary);transition:color .15s ease;}
+.nav-links a:hover{color:var(--text-primary);}
+.nav-actions{display:flex;align-items:center;gap:.75rem;}
+.nav-toggle{display:none;background:none;border:1px solid var(--glass-border-strong);border-radius:9px;width:40px;height:40px;align-items:center;justify-content:center;color:var(--text-primary);cursor:pointer;flex:none;}
+@media (max-width:900px){
+  .nav-links{display:none;}
+  .nav-actions .btn-ghost{display:none;}
+  .nav-toggle{display:flex;}
+}
+.nav-mobile{display:none;flex-direction:column;gap:.2rem;padding:.75rem 0 1.25rem;border-bottom:1px solid var(--glass-border);}
+.nav-mobile.open{display:flex;}
+.nav-mobile a{padding:.7rem 0;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--glass-border);}
+.nav-mobile .btn{margin-top:.75rem;}
+
+/* ---------- HERO ---------- */
+.hero{padding-block:clamp(3rem,7vw,5rem) clamp(3.5rem,7vw,5.5rem);}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,5vw,3.5rem);align-items:center;}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr;}}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;line-height:1.08;}
+.hero-sub{font-size:1.1rem;color:var(--text-secondary);margin-top:1.25rem;max-width:50ch;}
+.hero-ctas{display:flex;gap:.9rem;margin-top:2rem;flex-wrap:wrap;}
+.hero-trust{margin-top:1.5rem;font-size:.85rem;color:var(--text-muted);}
+
+.hero-visual{position:relative;}
+.preview-card{padding:1.4rem;position:relative;}
+.preview-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
+.preview-title{font-size:.8rem;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.04em;}
+.preview-dots{display:flex;gap:.35rem;}
+.preview-dots span{width:8px;height:8px;border-radius:50%;background:var(--glass-border-strong);}
+.preview-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-bottom:1rem;}
+.preview-kpi{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:12px;padding:.75rem .85rem;}
+.preview-kpi .num{font-family:var(--font-mono);font-size:1.15rem;font-weight:600;}
+.preview-kpi .lbl{font-size:.7rem;color:var(--text-muted);margin-top:.15rem;}
+.preview-chart{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:12px;padding:.7rem .7rem .4rem;margin-bottom:1rem;}
+.preview-list{display:flex;flex-direction:column;gap:.55rem;}
+.preview-row{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--text-secondary);}
+.preview-row .dot{width:7px;height:7px;border-radius:50%;flex:none;}
+.chip-float{position:absolute;padding:.5rem .8rem;border-radius:10px;font-size:.78rem;font-weight:600;box-shadow:var(--shadow-md);animation:float 6s ease-in-out infinite;}
+.chip-1{top:-14px;right:12px;background:var(--bg-panel-raised);border:1px solid var(--glass-border-strong);color:var(--emerald);}
+.chip-2{bottom:-16px;left:-10px;background:var(--bg-panel-raised);border:1px solid var(--glass-border-strong);color:var(--cyan);animation-delay:1.5s;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+/* ---------- STATS ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;padding-block:clamp(2rem,4vw,2.5rem);}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr);}}
+.stat{padding:1.1rem 1.2rem;}
+.stat .num{font-family:var(--font-mono);font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:600;background:linear-gradient(100deg,var(--violet),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.stat .lbl{font-size:.82rem;color:var(--text-secondary);margin-top:.35rem;}
+
+/* ---------- PILLARS ---------- */
+.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.25rem;}
+@media (max-width:980px){.pillars-grid{grid-template-columns:1fr;}}
+.pillar{padding:1.75rem;display:flex;flex-direction:column;gap:1rem;transition:border-color .2s ease,transform .2s ease;}
+.pillar:hover{border-color:var(--glass-border-strong);transform:translateY(-3px);}
+.pillar-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;background:linear-gradient(140deg,rgba(139,107,255,0.22),rgba(45,212,238,0.14));border:1px solid var(--glass-border);color:var(--cyan);}
+.pillar h3{font-size:1.2rem;font-weight:700;}
+.pillar p{color:var(--text-secondary);font-size:.95rem;}
+.pillar-tags{display:flex;flex-direction:column;gap:.5rem;margin-top:.25rem;}
+.pillar-tags li{display:flex;align-items:flex-start;gap:.5rem;font-size:.85rem;color:var(--text-secondary);}
+.pillar-tags li svg{flex:none;margin-top:.15rem;color:var(--emerald);}
+
+.support-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media (max-width:900px){.support-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:600px){.support-grid{grid-template-columns:1fr;}}
+.support-card{padding:1.4rem;display:flex;flex-direction:column;gap:.7rem;}
+.support-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--bg-panel);border:1px solid var(--glass-border);color:var(--violet);flex:none;}
+.support-card h4{font-size:1rem;font-weight:700;}
+.support-card p{font-size:.88rem;color:var(--text-secondary);}
+
+/* ---------- DEMO ---------- */
+.demo-shell{padding:1.25rem;}
+.demo-tabs{display:flex;flex-wrap:wrap;gap:.5rem;padding-bottom:1.1rem;margin-bottom:1.1rem;border-bottom:1px solid var(--glass-border);}
+.demo-tab{padding:.6rem 1rem;border-radius:9px;background:transparent;border:1px solid transparent;color:var(--text-secondary);font-weight:600;font-size:.85rem;cursor:pointer;transition:all .15s ease;display:flex;align-items:center;gap:.45rem;}
+.demo-tab svg{flex:none;}
+.demo-tab:hover{color:var(--text-primary);}
+.demo-tab[aria-selected="true"]{background:linear-gradient(120deg,rgba(109,78,255,0.28),rgba(11,122,148,0.22));border-color:var(--glass-border-strong);color:var(--text-primary);}
+.demo-panel{padding:.25rem;}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.25rem;}
+@media (max-width:760px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+.kpi{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:14px;padding:1rem 1.1rem;}
+.kpi .num{font-family:var(--font-mono);font-size:1.4rem;font-weight:600;}
+.kpi .lbl{font-size:.78rem;color:var(--text-muted);margin-top:.25rem;}
+.kpi .delta{font-size:.75rem;margin-top:.4rem;font-weight:600;}
+.kpi .delta.up{color:var(--success);}
+
+.demo-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:1.25rem;align-items:start;}
+@media (max-width:840px){.demo-cols{grid-template-columns:1fr;}}
+.panel-box{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:14px;padding:1.1rem 1.2rem;}
+.panel-box h4{font-size:.95rem;font-weight:700;margin-bottom:.9rem;}
+.activity-row{display:flex;gap:.7rem;align-items:flex-start;padding:.55rem 0;border-top:1px solid var(--glass-border);font-size:.85rem;}
+.activity-row:first-child{border-top:none;padding-top:0;}
+.activity-row .time{color:var(--text-muted);font-size:.75rem;flex:none;font-family:var(--font-mono);}
+
+.table-wrap{overflow-x:auto;}
+table.crm-table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:560px;}
+table.crm-table th{text-align:left;color:var(--text-muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;padding:0 .7rem .6rem 0;border-bottom:1px solid var(--glass-border);}
+table.crm-table td{padding:.65rem .7rem .65rem 0;border-bottom:1px solid var(--glass-border);color:var(--text-secondary);}
+table.crm-table td:first-child,table.crm-table th:first-child{color:var(--text-primary);}
+.pill{display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .6rem;border-radius:100px;font-size:.72rem;font-weight:600;}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;}
+.pill-new{background:rgba(79,182,255,0.14);color:var(--info);}
+.pill-contact{background:rgba(245,185,74,0.14);color:var(--warning);}
+.pill-qualified{background:rgba(139,107,255,0.16);color:var(--violet);}
+.pill-client{background:rgba(62,213,152,0.15);color:var(--success);}
+
+.channel-tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;color:var(--text-secondary);}
+.channel-tag .dot{width:7px;height:7px;border-radius:50%;flex:none;}
+
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem;}
+@media (max-width:760px){.product-grid{grid-template-columns:1fr;}}
+.product-card{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:14px;padding:1.1rem;display:flex;flex-direction:column;gap:.5rem;}
+.product-card .kind{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
+.product-card h5{font-size:.98rem;font-weight:700;}
+.product-card .price-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:.3rem;}
+.product-card .price{font-family:var(--font-mono);font-weight:600;color:var(--emerald);}
+.product-card .sales{font-size:.75rem;color:var(--text-muted);}
+
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:.9rem;overflow-x:auto;padding-bottom:.4rem;}
+.kanban-col h5{font-size:.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem;display:flex;justify-content:space-between;}
+.kanban-card{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:12px;padding:.7rem .8rem;font-size:.82rem;margin-bottom:.6rem;}
+.kanban-card .name{font-weight:600;margin-bottom:.35rem;}
+
+.inbox-row{display:flex;gap:.8rem;align-items:flex-start;padding:.8rem 0;border-top:1px solid var(--glass-border);}
+.inbox-row:first-child{border-top:none;padding-top:0;}
+.inbox-badge{flex:none;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#0A0E17;}
+.inbox-body{flex:1;min-width:0;}
+.inbox-name{font-weight:600;font-size:.88rem;display:flex;justify-content:space-between;gap:.5rem;}
+.inbox-name .time{font-weight:500;color:var(--text-muted);font-size:.72rem;font-family:var(--font-mono);}
+.inbox-msg{color:var(--text-secondary);font-size:.83rem;margin-top:.2rem;}
+
+.rule-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.75rem 0;border-top:1px solid var(--glass-border);}
+.rule-row:first-child{border-top:none;padding-top:0;}
+.rule-row span{font-size:.85rem;color:var(--text-secondary);}
+.rule-status{font-size:.72rem;font-weight:700;color:var(--success);display:inline-flex;align-items:center;gap:.4rem;flex:none;}
+.rule-status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success);}
+.score-row{margin-bottom:1rem;}
+.score-top{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.4rem;}
+.score-top .tag{font-size:.7rem;font-weight:700;padding:.15rem .5rem;border-radius:100px;}
+.score-track{height:7px;border-radius:100px;background:var(--glass-fill-strong);overflow:hidden;}
+.score-fill{height:100%;border-radius:100px;}
+
+/* ---------- PRICING ---------- */
+.billing-toggle{display:inline-flex;align-items:center;gap:.3rem;background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:100px;padding:.3rem;margin:0 auto 2.5rem;}
+.billing-toggle button{border:none;background:transparent;padding:.55rem 1.1rem;border-radius:100px;font-size:.85rem;font-weight:600;color:var(--text-secondary);cursor:pointer;}
+.billing-toggle button.active{background:linear-gradient(120deg,var(--btn-grad-a),var(--btn-grad-b));color:#fff;}
+.save-badge{font-size:.68rem;font-weight:700;color:var(--emerald);background:rgba(52,229,168,0.14);padding:.15rem .5rem;border-radius:100px;margin-left:.4rem;}
+
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;align-items:stretch;}
+@media (max-width:960px){.pricing-grid{grid-template-columns:1fr;max-width:420px;margin-inline:auto;}}
+.price-card{padding:1.75rem;display:flex;flex-direction:column;gap:1.1rem;}
+.price-card.featured{border-color:var(--glass-border-strong);position:relative;box-shadow:var(--shadow-lg);}
+.price-card.featured::before{content:"Recomendado";position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(120deg,var(--btn-grad-a),var(--btn-grad-b));color:#fff;font-size:.7rem;font-weight:700;padding:.35rem .8rem;border-radius:100px;}
+.price-card h3{font-size:1.1rem;font-weight:700;}
+.price-card .tagline{font-size:.85rem;color:var(--text-secondary);}
+.price-amount{display:flex;align-items:baseline;gap:.3rem;font-family:var(--font-mono);}
+.price-amount .val{font-size:2.1rem;font-weight:600;}
+.price-amount .per{font-size:.85rem;color:var(--text-muted);}
+.price-feats{display:flex;flex-direction:column;gap:.6rem;flex:1;}
+.price-feats li{display:flex;gap:.55rem;font-size:.87rem;color:var(--text-secondary);}
+.price-feats li svg{flex:none;margin-top:.15rem;color:var(--emerald);}
+
+/* ---------- TESTIMONIALS ---------- */
+.testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;}
+@media (max-width:900px){.testimonial-grid{grid-template-columns:1fr;}}
+.testimonial{padding:1.5rem;display:flex;flex-direction:column;gap:1rem;}
+.testimonial q{font-size:.94rem;color:var(--text-primary);line-height:1.55;quotes:none;}
+.testimonial-who{display:flex;align-items:center;gap:.7rem;}
+.testimonial-who .avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:.85rem;color:#0A0E17;flex:none;}
+.testimonial-who .name{font-size:.87rem;font-weight:700;}
+.testimonial-who .role{font-size:.78rem;color:var(--text-muted);}
+
+/* ---------- CTA BANNER ---------- */
+.cta-banner{margin:0 auto clamp(3rem,6vw,5rem);max-width:1180px;padding:clamp(2.2rem,5vw,3.5rem);text-align:center;position:relative;overflow:hidden;}
+.cta-banner h2{font-size:clamp(1.6rem,3.6vw,2.3rem);}
+.cta-banner .lede{margin-inline:auto;}
+.cta-form{display:flex;gap:.6rem;justify-content:center;margin-top:1.75rem;flex-wrap:wrap;}
+.cta-form input{padding:.85rem 1.1rem;border-radius:11px;border:1px solid var(--glass-border-strong);background:var(--bg-panel);color:var(--text-primary);font-size:.9rem;min-width:260px;}
+.cta-form input::placeholder{color:var(--text-muted);}
+.cta-note{font-size:.78rem;color:var(--text-muted);margin-top:1rem;}
+
+/* ---------- FOOTER ---------- */
+.footer{border-top:1px solid var(--glass-border);padding-block:3rem 2rem;}
+.footer-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:2rem;margin-bottom:2.5rem;}
+@media (max-width:760px){.footer-grid{grid-template-columns:repeat(2,1fr);}}
+.footer-brand p{color:var(--text-secondary);font-size:.88rem;margin-top:.75rem;max-width:32ch;}
+.footer-col h5{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:.9rem;}
+.footer-col ul{display:flex;flex-direction:column;gap:.6rem;}
+.footer-col a{font-size:.88rem;color:var(--text-secondary);}
+.footer-col a:hover{color:var(--text-primary);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding-top:2rem;border-top:1px solid var(--glass-border);font-size:.82rem;color:var(--text-muted);}
+.social-row{display:flex;gap:.6rem;}
+.social-row a{width:36px;height:36px;border-radius:9px;border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);}
+.social-row a:hover{color:var(--text-primary);border-color:var(--glass-border-strong);}
+</style>
+
+<div class="aurora-bg" aria-hidden="true">
+  <span class="blob blob-a"></span>
+  <span class="blob blob-b"></span>
+  <span class="blob blob-c"></span>
+</div>
+
+<header class="nav">
+  <div class="nav-inner container">
+    <a class="logo" href="#top">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="9" fill="url(#navlogo)"/>
+        <path d="M6 20C9 14 12 24 16 17C20 10 23 20 26 14" stroke="white" stroke-width="2.2" stroke-linecap="round" opacity="0.95"/>
+        <path d="M6 14C9 8 12 18 16 11C20 4.5 23 14 26 8" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <defs><linearGradient id="navlogo" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#8B6BFF"/><stop offset="0.5" stop-color="#2DD4EE"/><stop offset="1" stop-color="#34E5A8"/></linearGradient></defs>
+      </svg>
+      Aurora <span>CRM</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#modulos">Módulos</a>
+      <a href="#demo">Panel en vivo</a>
+      <a href="#precios">Precios</a>
+      <a href="#opiniones">Opiniones</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-ghost" href="#demo">Ver demo</a>
+      <a class="btn btn-primary" href="#precios">Solicitar acceso</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Abrir menú">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 5H16M2 9H16M2 13H16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <nav class="nav-mobile container" id="navMobile">
+    <a href="#modulos">Módulos</a>
+    <a href="#demo">Panel en vivo</a>
+    <a href="#precios">Precios</a>
+    <a href="#opiniones">Opiniones</a>
+    <a class="btn btn-primary btn-block" href="#precios">Solicitar acceso</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero container">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">CRM · Tienda digital · Redes sociales</p>
+        <h1>Donde convergen <span class="grad-text">tus clientes, tu tienda y tus redes</span></h1>
+        <p class="hero-sub">Aurora centraliza la ficha de cada cliente, la venta de tus productos digitales y la captación de leads desde Instagram, TikTok, Facebook y WhatsApp — con IA que decide a quién responder primero.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary btn-lg" href="#precios">Empezar gratis</a>
+          <a class="btn btn-ghost btn-lg" href="#demo">Ver el panel en vivo →</a>
+        </div>
+        <p class="hero-trust">Sin tarjeta de crédito · Configuración en menos de 10 minutos</p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="preview-card glass">
+          <span class="chip-float chip-1">✦ IA activa</span>
+          <span class="chip-float chip-2">+12 leads hoy</span>
+          <div class="preview-top">
+            <span class="preview-title">RESUMEN · HOY</span>
+            <div class="preview-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="preview-kpis">
+            <div class="preview-kpi"><div class="num tabular">€12,480</div><div class="lbl">Ventas del mes</div></div>
+            <div class="preview-kpi"><div class="num tabular">96</div><div class="lbl">Leads nuevos</div></div>
+          </div>
+          <div class="preview-chart">
+            <svg viewBox="0 0 320 96" width="100%" height="90" preserveAspectRatio="none">
+              <line x1="8" y1="80" x2="312" y2="80" stroke="var(--glass-border)" stroke-width="1"/>
+              <line x1="8" y1="52" x2="312" y2="52" stroke="var(--glass-border)" stroke-width="1"/>
+              <rect x="18" y="52" width="26" height="28" rx="4" fill="var(--violet)" opacity="0.55"/>
+              <rect x="60" y="42" width="26" height="38" rx="4" fill="var(--violet)" opacity="0.65"/>
+              <rect x="102" y="46" width="26" height="34" rx="4" fill="var(--violet)" opacity="0.6"/>
+              <rect x="144" y="30" width="26" height="50" rx="4" fill="var(--cyan)" opacity="0.75"/>
+              <rect x="186" y="20" width="26" height="60" rx="4" fill="var(--cyan)" opacity="0.85"/>
+              <rect x="228" y="10" width="26" height="70" rx="4" fill="url(#barlast)"/>
+              <defs><linearGradient id="barlast" x1="0" y1="0" x2="0" y2="1"><stop stop-color="var(--emerald)"/><stop offset="1" stop-color="var(--cyan)"/></linearGradient></defs>
+            </svg>
+          </div>
+          <div class="preview-list">
+            <div class="preview-row"><span class="dot" style="background:var(--chan-ig)"></span> Nuevo lead calificado desde Instagram</div>
+            <div class="preview-row"><span class="dot" style="background:var(--chan-wa)"></span> Pedido de "Curso de IA" vía WhatsApp</div>
+            <div class="preview-row"><span class="dot" style="background:var(--info)"></span> Carrito abandonado recuperado (€39)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats container reveal">
+    <div class="stat glass"><div class="num tabular">2,480+</div><div class="lbl">Negocios activos en Aurora</div></div>
+    <div class="stat glass"><div class="num tabular">€3.2M</div><div class="lbl">En productos digitales vendidos</div></div>
+    <div class="stat glass"><div class="num tabular">38%</div><div class="lbl">Más leads calificados con IA</div></div>
+    <div class="stat glass"><div class="num tabular">&lt;2 min</div><div class="lbl">Tiempo medio de primera respuesta</div></div>
+  </section>
+
+  <section class="section container" id="modulos">
+    <div class="section-head reveal">
+      <p class="eyebrow">Módulos principales</p>
+      <h2 class="h-section">Tres pilares, un solo panel</h2>
+      <p class="lede">Aurora nace para negocios que venden y atienden a la vez desde varios canales: tu base de clientes, tu tienda digital y tus redes sociales dejan de vivir en herramientas separadas.</p>
+    </div>
+
+    <div class="pillars-grid">
+      <article class="pillar glass reveal">
+        <div class="pillar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.6-3.4 3-5 5.5-5s4.9 1.6 5.5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="8.5" r="2.4" stroke="currentColor" stroke-width="1.6" opacity=".6"/><path d="M15.5 13.4c2.2.2 3.9 1.7 4.4 4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg>
+        </div>
+        <h3>Gestión de clientes 360°</h3>
+        <p>Ficha única por cliente con historial de conversaciones, compras, notas y etapa del pipeline. Segmenta por valor de vida (LTV), frecuencia de compra o etiquetas RFM.</p>
+        <ul class="pillar-tags">
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Pipeline visual por etapas</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Recordatorios y tareas automáticas</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Segmentación por LTV y RFM</li>
+        </ul>
+      </article>
+
+      <article class="pillar glass reveal">
+        <div class="pillar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h2l1.2 10.4a1.6 1.6 0 001.6 1.4h7.6a1.6 1.6 0 001.6-1.3L19.5 8H7" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="10" cy="19.5" r="1.3" fill="currentColor"/><circle cx="16.5" cy="19.5" r="1.3" fill="currentColor"/></svg>
+        </div>
+        <h3>Tienda de productos digitales</h3>
+        <p>Vende ebooks, cursos, plantillas y licencias sin salir del CRM. Checkout integrado, entrega automática por email y recuperación de carritos abandonados.</p>
+        <ul class="pillar-tags">
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Checkout y pagos integrados</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Entrega automática de archivos y accesos</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Recuperación de carritos abandonados</li>
+        </ul>
+      </article>
+
+      <article class="pillar glass reveal">
+        <div class="pillar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2.2" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="5.5" r="2.2" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="18.5" r="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M7 11l9-4.6M7 13l9 4.6" stroke="currentColor" stroke-width="1.6"/></svg>
+        </div>
+        <h3>Captación desde redes sociales</h3>
+        <p>Cada comentario, DM o formulario en Instagram, TikTok, Facebook y WhatsApp entra directo al pipeline como lead calificado, con la fuente y la campaña (UTM) ya etiquetadas.</p>
+        <ul class="pillar-tags">
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> DMs y formularios a leads automáticos</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Etiquetado de fuente y campaña UTM</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Enrutamiento automático por equipo</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="support-grid">
+      <div class="support-card glass reveal">
+        <div class="support-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H9l-4 4V5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8.5" cy="10" r=".9" fill="currentColor"/><circle cx="12" cy="10" r=".9" fill="currentColor"/><circle cx="15.5" cy="10" r=".9" fill="currentColor"/></svg></div>
+        <h4>Bandeja unificada</h4>
+        <p>WhatsApp, email, Instagram DM y chat web en una sola conversación por cliente, sin cambiar de pestaña.</p>
+      </div>
+      <div class="support-card glass reveal">
+        <div class="support-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+        <h4>Asistente IA</h4>
+        <p>Lead scoring automático, resúmenes de conversación y sugerencia de la próxima mejor acción.</p>
+      </div>
+      <div class="support-card glass reveal">
+        <div class="support-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="5.5" cy="6" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="18.5" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="5.5" cy="18" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 6.8L16.7 11M16.7 13L7.5 17.2" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <h4>Automatizaciones</h4>
+        <p>Secuencias de email, tareas y notificaciones que se disparan solas según el comportamiento del cliente.</p>
+      </div>
+      <div class="support-card glass reveal">
+        <div class="support-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="12" width="3.4" height="7" rx="1" fill="currentColor" opacity=".55"/><rect x="10.3" y="7" width="3.4" height="12" rx="1" fill="currentColor" opacity=".8"/><rect x="16.6" y="3.5" width="3.4" height="15.5" rx="1" fill="currentColor"/></svg></div>
+        <h4>Analíticas en tiempo real</h4>
+        <p>Embudo de conversión, cohortes, ROI por campaña y LTV por segmento, siempre actualizados.</p>
+      </div>
+      <div class="support-card glass reveal">
+        <div class="support-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h4>Equipo y permisos</h4>
+        <p>Roles por área, asignación automática de leads y calendario compartido del equipo comercial.</p>
+      </div>
+      <div class="support-card glass reveal">
+        <div class="support-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 15L4.5 11.5 8 8M16 8l3.5 3.5L16 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 6L10.5 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <h4>Integraciones abiertas</h4>
+        <p>API REST, webhooks, Meta Business Suite y las pasarelas de pago que ya usas.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section demo-section container" id="demo">
+    <div class="section-head reveal">
+      <p class="eyebrow">Panel en vivo · vista previa</p>
+      <h2 class="h-section">Así se ve por dentro</h2>
+      <p class="lede">Una vista simplificada del panel real de Aurora, con datos de ejemplo. Cambia de pestaña para explorar cada módulo.</p>
+    </div>
+
+    <div class="demo-shell glass reveal">
+      <div class="demo-tabs" role="tablist" aria-label="Módulos del panel">
+        <button class="demo-tab" role="tab" id="tab-resumen" aria-controls="panel-resumen" aria-selected="true" data-tab="resumen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg>
+          Resumen
+        </button>
+        <button class="demo-tab" role="tab" id="tab-clientes" aria-controls="panel-clientes" aria-selected="false" data-tab="clientes">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3.8 19c.6-3.2 2.8-4.7 5.2-4.7s4.6 1.5 5.2 4.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Clientes
+        </button>
+        <button class="demo-tab" role="tab" id="tab-tienda" aria-controls="panel-tienda" aria-selected="false" data-tab="tienda">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4.5 4h2l1 9.6a1.5 1.5 0 001.5 1.4h7a1.5 1.5 0 001.5-1.2L19 8H7.2" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.2" fill="currentColor"/><circle cx="16" cy="19" r="1.2" fill="currentColor"/></svg>
+          Tienda
+        </button>
+        <button class="demo-tab" role="tab" id="tab-leads" aria-controls="panel-leads" aria-selected="false" data-tab="leads">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="6.5" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="18.5" cy="6.5" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="17.5" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 8L11 16M17 8L12.7 16" stroke="currentColor" stroke-width="1.5"/></svg>
+          Leads &amp; Redes
+        </button>
+        <button class="demo-tab" role="tab" id="tab-bandeja" aria-controls="panel-bandeja" aria-selected="false" data-tab="bandeja">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H9l-4 4V5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          Bandeja
+        </button>
+        <button class="demo-tab" role="tab" id="tab-ia" aria-controls="panel-ia" aria-selected="false" data-tab="ia">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          IA
+        </button>
+      </div>
+
+      <div class="demo-panels">
+        <div class="demo-panel" id="panel-resumen" role="tabpanel" aria-labelledby="tab-resumen">
+          <div class="kpi-row">
+            <div class="kpi"><div class="num tabular">€12,480</div><div class="lbl">Ingresos del mes</div><div class="delta up">↑ 18% vs. mes anterior</div></div>
+            <div class="kpi"><div class="num tabular">96</div><div class="lbl">Leads nuevos</div><div class="delta up">↑ 34 desde redes</div></div>
+            <div class="kpi"><div class="num tabular">24.5%</div><div class="lbl">Tasa de conversión</div><div class="delta up">↑ 3.1 pts</div></div>
+            <div class="kpi"><div class="num tabular">7</div><div class="lbl">Tickets abiertos</div></div>
+          </div>
+          <div class="demo-cols">
+            <div class="panel-box">
+              <h4>Ventas últimos 6 meses (miles €)</h4>
+              <svg viewBox="0 0 320 140" width="100%" height="150">
+                <line x1="10" y1="110" x2="310" y2="110" stroke="var(--glass-border)" stroke-width="1"/>
+                <line x1="10" y1="73" x2="310" y2="73" stroke="var(--glass-border)" stroke-width="1"/>
+                <line x1="10" y1="36" x2="310" y2="36" stroke="var(--glass-border)" stroke-width="1"/>
+                <rect x="18" y="69" width="28" height="41" rx="4" fill="var(--violet)" opacity="0.55"/>
+                <rect x="62" y="59" width="28" height="51" rx="4" fill="var(--violet)" opacity="0.65"/>
+                <rect x="106" y="66" width="28" height="44" rx="4" fill="var(--violet)" opacity="0.6"/>
+                <rect x="150" y="48" width="28" height="62" rx="4" fill="var(--cyan)" opacity="0.7"/>
+                <rect x="194" y="39" width="28" height="71" rx="4" fill="var(--cyan)" opacity="0.85"/>
+                <rect x="238" y="23" width="28" height="87" rx="4" fill="url(#barlast2)"/>
+                <text x="32" y="124" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="IBM Plex Mono">Abr</text>
+                <text x="76" y="124" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="IBM Plex Mono">May</text>
+                <text x="120" y="124" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="IBM Plex Mono">Jun</text>
+                <text x="164" y="124" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="IBM Plex Mono">Jul</text>
+                <text x="208" y="124" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="IBM Plex Mono">Ago</text>
+                <text x="252" y="124" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="IBM Plex Mono">Sep</text>
+                <text x="252" y="16" text-anchor="middle" font-size="10" font-weight="600" fill="var(--emerald)" font-family="IBM Plex Mono">38k</text>
+                <defs><linearGradient id="barlast2" x1="0" y1="0" x2="0" y2="1"><stop stop-color="var(--emerald)"/><stop offset="1" stop-color="var(--cyan)"/></linearGradient></defs>
+              </svg>
+            </div>
+            <div class="panel-box">
+              <h4>Actividad reciente</h4>
+              <div class="activity-row"><span class="time">09:41</span><span>Lucía F. calificó como lead caliente (IA)</span></div>
+              <div class="activity-row"><span class="time">09:12</span><span>Nueva venta: "Pack de Contratos" (€39)</span></div>
+              <div class="activity-row"><span class="time">08:55</span><span>Comentario en Reel convertido a lead</span></div>
+              <div class="activity-row"><span class="time">08:20</span><span>Secuencia de bienvenida enviada a 6 clientes</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-panel" id="panel-clientes" role="tabpanel" aria-labelledby="tab-clientes" hidden>
+          <div class="table-wrap">
+            <table class="crm-table">
+              <thead><tr><th>Cliente</th><th>Etapa</th><th>LTV</th><th>Canal</th><th>Último contacto</th></tr></thead>
+              <tbody>
+                <tr><td>Marta Ibáñez</td><td><span class="pill pill-client">Cliente</span></td><td class="tabular">€860</td><td>WhatsApp</td><td class="tabular">Hoy</td></tr>
+                <tr><td>Diego Salas</td><td><span class="pill pill-qualified">Calificado</span></td><td class="tabular">€0</td><td>Instagram</td><td class="tabular">Ayer</td></tr>
+                <tr><td>Lucía Fernández</td><td><span class="pill pill-contact">Contactado</span></td><td class="tabular">€149</td><td>Formulario web</td><td class="tabular">Hace 2 días</td></tr>
+                <tr><td>Carlos Peña</td><td><span class="pill pill-client">Cliente</span></td><td class="tabular">€1,240</td><td>Email</td><td class="tabular">Hace 3 días</td></tr>
+                <tr><td>Noa Delgado</td><td><span class="pill pill-new">Nuevo</span></td><td class="tabular">€0</td><td>TikTok</td><td class="tabular">Hace 5 días</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="demo-panel" id="panel-tienda" role="tabpanel" aria-labelledby="tab-tienda" hidden>
+          <div class="product-grid">
+            <div class="product-card">
+              <span class="kind">Ebook</span>
+              <h5>Guía de Ventas B2B</h5>
+              <div class="price-row"><span class="price tabular">€19</span><span class="sales tabular">342 ventas</span></div>
+            </div>
+            <div class="product-card">
+              <span class="kind">Curso</span>
+              <h5>Automatización de Marketing con IA</h5>
+              <div class="price-row"><span class="price tabular">€149</span><span class="sales tabular">128 ventas</span></div>
+            </div>
+            <div class="product-card">
+              <span class="kind">Plantillas</span>
+              <h5>Pack de Contratos y Legales</h5>
+              <div class="price-row"><span class="price tabular">€39</span><span class="sales tabular">501 ventas</span></div>
+            </div>
+          </div>
+          <div class="panel-box">
+            <h4>Ingresos de la tienda este mes</h4>
+            <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:0;">
+              <div class="kpi"><div class="num tabular">€12,480</div><div class="lbl">Ingresos totales</div></div>
+              <div class="kpi"><div class="num tabular">971</div><div class="lbl">Descargas entregadas</div></div>
+              <div class="kpi"><div class="num tabular">4.2%</div><div class="lbl">Carritos recuperados</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-panel" id="panel-leads" role="tabpanel" aria-labelledby="tab-leads" hidden>
+          <div class="kanban">
+            <div class="kanban-col">
+              <h5>Nuevo <span>2</span></h5>
+              <div class="kanban-card"><div class="name">Sofía R.</div><span class="channel-tag"><span class="dot" style="background:var(--chan-ig)"></span>Instagram · comentó en Reel</span></div>
+              <div class="kanban-card"><div class="name">Iker M.</div><span class="channel-tag"><span class="dot" style="background:var(--chan-tiktok)"></span>TikTok · DM automático</span></div>
+            </div>
+            <div class="kanban-col">
+              <h5>Contactado <span>1</span></h5>
+              <div class="kanban-card"><div class="name">Valentina G.</div><span class="channel-tag"><span class="dot" style="background:var(--chan-wa)"></span>WhatsApp</span></div>
+            </div>
+            <div class="kanban-col">
+              <h5>Calificado <span>1</span></h5>
+              <div class="kanban-card"><div class="name">Bruno T.</div><span class="channel-tag"><span class="dot" style="background:var(--chan-web)"></span>Formulario web</span></div>
+            </div>
+            <div class="kanban-col">
+              <h5>Cliente <span>1</span></h5>
+              <div class="kanban-card"><div class="name">Elena V.</div><span class="channel-tag"><span class="dot" style="background:var(--chan-fb)"></span>Facebook Ads</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-panel" id="panel-bandeja" role="tabpanel" aria-labelledby="tab-bandeja" hidden>
+          <div class="inbox-row">
+            <div class="inbox-badge" style="background:var(--chan-wa)">WA</div>
+            <div class="inbox-body"><div class="inbox-name"><span>Marta Ibáñez</span><span class="time">2m</span></div><div class="inbox-msg">Hola, ¿el curso incluye certificado?</div></div>
+          </div>
+          <div class="inbox-row">
+            <div class="inbox-badge" style="background:var(--chan-ig)">IG</div>
+            <div class="inbox-body"><div class="inbox-name"><span>Diego Salas</span><span class="time">14m</span></div><div class="inbox-msg">¡Me encantó la plantilla de contrato!</div></div>
+          </div>
+          <div class="inbox-row">
+            <div class="inbox-badge" style="background:var(--chan-web)">@</div>
+            <div class="inbox-body"><div class="inbox-name"><span>Carlos Peña</span><span class="time">1h</span></div><div class="inbox-msg">Consulta sobre la factura de este mes.</div></div>
+          </div>
+          <div class="inbox-row">
+            <div class="inbox-badge" style="background:var(--chan-fb)">FB</div>
+            <div class="inbox-body"><div class="inbox-name"><span>Elena V.</span><span class="time">3h</span></div><div class="inbox-msg">¿Tienen descuento por volumen para equipos?</div></div>
+          </div>
+        </div>
+
+        <div class="demo-panel" id="panel-ia" role="tabpanel" aria-labelledby="tab-ia" hidden>
+          <div class="demo-cols">
+            <div class="panel-box">
+              <h4>Automatizaciones activas</h4>
+              <div class="rule-row"><span>Responder preguntas de precio en WhatsApp</span><span class="rule-status">Activo</span></div>
+              <div class="rule-row"><span>Secuencia de bienvenida tras la primera compra</span><span class="rule-status">Activo</span></div>
+              <div class="rule-row"><span>Alertar a ventas si un lead supera 80 puntos</span><span class="rule-status">Activo</span></div>
+              <div class="rule-row"><span>Recordatorio de carrito abandonado a las 2h</span><span class="rule-status">Activo</span></div>
+            </div>
+            <div class="panel-box">
+              <h4>Lead scoring en vivo</h4>
+              <div class="score-row">
+                <div class="score-top"><span>Sofía R.</span><span class="tag" style="background:rgba(62,213,152,0.16);color:var(--success)">Caliente · 88</span></div>
+                <div class="score-track"><div class="score-fill" style="width:88%;background:var(--success)"></div></div>
+              </div>
+              <div class="score-row">
+                <div class="score-top"><span>Bruno T.</span><span class="tag" style="background:rgba(245,185,74,0.16);color:var(--warning)">Tibio · 61</span></div>
+                <div class="score-track"><div class="score-fill" style="width:61%;background:var(--warning)"></div></div>
+              </div>
+              <div class="score-row">
+                <div class="score-top"><span>Iker M.</span><span class="tag" style="background:rgba(148,163,196,0.16);color:var(--text-secondary)">Frío · 27</span></div>
+                <div class="score-track"><div class="score-fill" style="width:27%;background:var(--text-muted)"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" id="precios">
+    <div class="section-head center reveal">
+      <p class="eyebrow" style="justify-content:center;">Precios</p>
+      <h2 class="h-section">Un plan para cada etapa</h2>
+      <p class="lede">Empieza gratis y escala a medida que crecen tus clientes, tus canales y tu equipo.</p>
+    </div>
+
+    <div style="text-align:center;">
+      <div class="billing-toggle" role="group" aria-label="Ciclo de facturación">
+        <button id="btnMonthly" class="active" type="button">Mensual</button>
+        <button id="btnAnnual" type="button">Anual <span class="save-badge">2 meses gratis</span></button>
+      </div>
+    </div>
+
+    <div class="pricing-grid reveal">
+      <div class="price-card glass">
+        <h3>Starter</h3>
+        <p class="tagline">Para negocios que están empezando a conectar sus canales.</p>
+        <div class="price-amount"><span class="val tabular" data-monthly="29" data-annual="24">€29</span><span class="per">/mes</span></div>
+        <ul class="price-feats">
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> 1 canal social conectado</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> 500 contactos</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Tienda digital (hasta 5 productos)</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Bandeja unificada</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Soporte por email</li>
+        </ul>
+        <a class="btn btn-ghost btn-block" href="#top">Empezar gratis</a>
+      </div>
+
+      <div class="price-card glass featured">
+        <h3>Crecimiento</h3>
+        <p class="tagline">Para equipos que venden todos los días desde varios canales.</p>
+        <div class="price-amount"><span class="val tabular" data-monthly="79" data-annual="65">€79</span><span class="per">/mes</span></div>
+        <ul class="price-feats">
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Todos los canales sociales + WhatsApp</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Contactos y productos ilimitados</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> IA: lead scoring y automatizaciones</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Analíticas avanzadas</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Soporte prioritario 24/7</li>
+        </ul>
+        <a class="btn btn-primary btn-block" href="#top">Empezar gratis</a>
+      </div>
+
+      <div class="price-card glass">
+        <h3>Empresa</h3>
+        <p class="tagline">Para organizaciones con varios equipos y necesidades a medida.</p>
+        <div class="price-amount"><span class="val">Personalizado</span></div>
+        <ul class="price-feats">
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Todo lo de Crecimiento</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Roles y permisos avanzados</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> API abierta y webhooks</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Gestor de cuenta dedicado</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.2l3 3 6-6.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> SLA garantizado</li>
+        </ul>
+        <a class="btn btn-ghost btn-block" href="#top">Hablar con ventas</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" id="opiniones">
+    <div class="section-head center reveal">
+      <p class="eyebrow" style="justify-content:center;">Opiniones</p>
+      <h2 class="h-section">Negocios que ya centralizaron todo</h2>
+    </div>
+    <div class="testimonial-grid reveal">
+      <div class="testimonial glass">
+        <q>Dejamos de perder leads en los DMs de Instagram. Ahora cada comentario entra directo al pipeline con la campaña ya etiquetada.</q>
+        <div class="testimonial-who">
+          <span class="avatar" style="background:var(--violet)">MR</span>
+          <div><div class="name">Marina R.</div><div class="role">Fundadora, academia de cursos online</div></div>
+        </div>
+      </div>
+      <div class="testimonial glass">
+        <q>Vendemos plantillas y ebooks sin salir del CRM. La entrega automática por email nos ahorra horas cada semana.</q>
+        <div class="testimonial-who">
+          <span class="avatar" style="background:var(--cyan)">TL</span>
+          <div><div class="name">Tomás L.</div><div class="role">Fundador, estudio de diseño digital</div></div>
+        </div>
+      </div>
+      <div class="testimonial glass">
+        <q>El lead scoring de la IA le dice a mi equipo a quién llamar primero. La conversión subió sin contratar a nadie más.</q>
+        <div class="testimonial-who">
+          <span class="avatar" style="background:var(--emerald)">CD</span>
+          <div><div class="name">Carla D.</div><div class="role">Responsable comercial, agencia de marketing</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner glass container reveal">
+    <p class="eyebrow" style="justify-content:center;">Empieza hoy</p>
+    <h2>Tu próximo cliente ya está en alguna red social</h2>
+    <p class="lede">Conecta tus canales, activa la IA y deja que Aurora priorice a quién responder primero.</p>
+    <form class="cta-form" onsubmit="return false;">
+      <label for="ctaEmail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Correo electrónico</label>
+      <input type="email" id="ctaEmail" placeholder="tu@negocio.com" required>
+      <button class="btn btn-primary btn-lg" type="submit">Empezar gratis</button>
+    </form>
+    <p class="cta-note">Sin tarjeta de crédito · Cancela cuando quieras</p>
+  </section>
+
+</main>
+
+<footer class="footer container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="#top">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="9" fill="url(#footlogo)"/>
+          <path d="M6 20C9 14 12 24 16 17C20 10 23 20 26 14" stroke="white" stroke-width="2.2" stroke-linecap="round" opacity="0.95"/>
+          <defs><linearGradient id="footlogo" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#8B6BFF"/><stop offset="0.5" stop-color="#2DD4EE"/><stop offset="1" stop-color="#34E5A8"/></linearGradient></defs>
+        </svg>
+        Aurora <span>CRM</span>
+      </a>
+      <p>Clientes, tienda digital y redes sociales, alineados en un solo panel.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Producto</h5>
+      <ul>
+        <li><a href="#modulos">Módulos</a></li>
+        <li><a href="#demo">Panel en vivo</a></li>
+        <li><a href="#precios">Precios</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Módulos</h5>
+      <ul>
+        <li><a href="#modulos">Gestión de clientes</a></li>
+        <li><a href="#modulos">Tienda digital</a></li>
+        <li><a href="#modulos">Redes y leads</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Empresa</h5>
+      <ul>
+        <li><a href="#opiniones">Opiniones</a></li>
+        <li><a href="#precios">Contacto</a></li>
+        <li><a href="#top">Blog</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Aurora CRM. Todos los derechos reservados.</span>
+    <div class="social-row" aria-hidden="true">
+      <a href="#top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></a>
+      <a href="#top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6.9 8.7H3.6V20H6.9V8.7zM5.3 3.5A1.9 1.9 0 103.4 5.4 1.9 1.9 0 005.3 3.5zM20.4 13.5c0-3.4-1.8-5-4.2-5-1.9 0-2.8 1.1-3.2 1.8V8.7H9.6c0 .9 0 12 0 12h3.3v-6.4c0-.3 0-.7.1-.9.3-.7.9-1.5 2-1.5 1.4 0 2 1.1 2 2.7V20h3.3z" fill="currentColor"/></svg></a>
+      <a href="#top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var navToggle = document.getElementById('navToggle');
+  var navMobile = document.getElementById('navMobile');
+  navToggle.addEventListener('click', function(){
+    var open = navMobile.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  navMobile.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      navMobile.classList.remove('open');
+      navToggle.setAttribute('aria-expanded','false');
+    });
+  });
+
+  var tabs = document.querySelectorAll('.demo-tab');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.setAttribute('aria-selected','false'); });
+      tab.setAttribute('aria-selected','true');
+      document.querySelectorAll('.demo-panel').forEach(function(p){ p.hidden = true; });
+      document.getElementById('panel-' + tab.dataset.tab).hidden = false;
+    });
+  });
+
+  var btnMonthly = document.getElementById('btnMonthly');
+  var btnAnnual = document.getElementById('btnAnnual');
+  var priceVals = document.querySelectorAll('.price-amount .val[data-monthly]');
+  function setBilling(annual){
+    btnMonthly.classList.toggle('active', !annual);
+    btnAnnual.classList.toggle('active', annual);
+    priceVals.forEach(function(el){
+      el.textContent = '€' + (annual ? el.dataset.annual : el.dataset.monthly);
+    });
+  }
+  btnMonthly.addEventListener('click', function(){ setBilling(false); });
+  btnAnnual.addEventListener('click', function(){ setBilling(true); });
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if('IntersectionObserver' in window && !reduceMotion){
+    var items = document.querySelectorAll('.reveal');
+    items.forEach(function(el){ el.classList.add('reveal-init'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('reveal-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12});
+    items.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>

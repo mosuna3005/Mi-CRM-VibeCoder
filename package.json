@@ -1,0 +1,12 @@
+{
+  "name": "mi-crm-vibecoder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page de Aurora CRM",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
